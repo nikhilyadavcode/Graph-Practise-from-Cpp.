@@ -1,51 +1,52 @@
-#include <bits/stdc++.h>
+#include<iostream>
+#include<vector>
 using namespace std;
 
-class Solution {
-public:
-    bool validPath(int n, vector<vector<int>>& edges, int source, int destination) {
-        vector<int> adj[n];
-        for (auto &e : edges) {
-            adj[e[0]].push_back(e[1]);
-            adj[e[1]].push_back(e[0]);
+bool dfs(int node, int dest, vector<vector<int>>& adj, vector<bool>& visited) {
+    if (node == dest) return true;
+    visited[node] = true;
+
+    for (int neighbor : adj[node]) {
+        if (!visited[neighbor]) {
+            if (dfs(neighbor, dest, adj, visited)) 
+                return true;
         }
-
-        vector<bool> visited(n, false);
-        queue<int> q;
-        q.push(source);
-        visited[source] = true;
-
-        while (!q.empty()) {
-            int node = q.front(); 
-            q.pop();
-            
-            if (node == destination) return true;
-
-            for (int neighbor : adj[node]) {
-                if (!visited[neighbor]) {
-                    visited[neighbor] = true;
-                    q.push(neighbor);
-                }
-            }
-        }
-        return false;
     }
-};
+    return false;
+}
+
+bool validPath(int V, vector<vector<int>>& adj, int src, int dest) {
+    vector<bool> visited(V, false);
+    return dfs(src, dest, adj, visited);
+}
 
 int main() {
-    Solution sol;
+    int V = 6;
+    int src = 0;
+    int dest = 5;
 
-    int n = 6;
-    vector<vector<int>> edges = {
-        {0, 1}, {0, 2}, {3, 5}, {5, 4}, {4, 3}
-    };
-    int source = 0, destination = 5;
+    vector<vector<int>> adj(V);
 
-    bool result = sol.validPath(n, edges, source, destination);
-    if (result) 
-        cout << "Path exists between " << source << " and " << destination << endl;
+    adj[0].push_back(1);
+    adj[0].push_back(2);
+
+    adj[1].push_back(0);
+
+    adj[2].push_back(0);
+
+    adj[3].push_back(4);
+    adj[3].push_back(5);
+
+    adj[4].push_back(3);
+    adj[4].push_back(5);
+
+    adj[5].push_back(3);
+    adj[5].push_back(4); // correction: earlier tumne 2 baar 3 dala tha
+
+    if (validPath(V, adj, src, dest)) 
+        cout << "Path exists\n";
     else 
-        cout << "No path exists between " << source << " and " << destination << endl;
+        cout << "No path\n";
 
     return 0;
 }
