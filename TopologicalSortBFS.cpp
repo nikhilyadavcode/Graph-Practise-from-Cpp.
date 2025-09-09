@@ -37,16 +37,14 @@ vector<int>topologistSort(int V,vector<vector<int>>&adj){
     return topo;
 }
 int main(){
-    int V=6;
+    int V=4;
 
     vector<vector<int>>adj(V);
 
-    adj[5].push_back(2);
-    adj[5].push_back(0);
-    adj[4].push_back(0);
-    adj[4].push_back(1);
-    adj[2].push_back(3);
-    adj[3].push_back(1);
+    adj.push_back({1,0});
+    adj.push_back({2,0});
+    adj.push_back({3,1});
+    adj.push_back({3,2});
 
     vector<int>topo=topologistSort(V,adj);
     cout<<"Topologist Sort Using BFS:";
